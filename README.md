@@ -1,4 +1,4 @@
-# flutter_application_1
+# flutter-simple-login
 
 A new Flutter project.
 
