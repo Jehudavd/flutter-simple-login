@@ -12,17 +12,11 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  TextEditingController usernameController = TextEditingController();
-  TextEditingController passwordController = TextEditingController();
-  TextEditingController phoneController = TextEditingController();
-  String? username;
-  String? password;
-  bool obscurePassword = true;
-  final _formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
     var sizeWidth = MediaQuery.sizeOf(context).width;
+    var loginProvider = context.watch<LoginProvider>();
 
     return Scaffold(
       appBar: AppBar(
@@ -35,7 +29,7 @@ class _LoginPageState extends State<LoginPage> {
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 30),
           child: Form(
-            key: _formKey,
+            key: loginProvider.formKey,
             child: ListView(
               children: [
                 SizedBox(
@@ -76,7 +70,7 @@ class _LoginPageState extends State<LoginPage> {
                   style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                 ),
                 TextFormField(
-                    controller: usernameController,
+                    controller: loginProvider.usernameController,
                     validator: (value) {
                       if (value!.isEmpty) {
                         return 'Tolong isi field ini';
@@ -95,8 +89,8 @@ class _LoginPageState extends State<LoginPage> {
                   style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                 ),
                 TextFormField(
-                    controller: passwordController,
-                    obscureText: obscurePassword,
+                    controller: loginProvider.passwordController,
+                    obscureText: loginProvider.obscurePassword,
                     validator: (value) {
                       if (value!.isEmpty) {
                         return 'Tolong isi field ini';
@@ -106,11 +100,9 @@ class _LoginPageState extends State<LoginPage> {
                     decoration: InputDecoration(
                         suffixIcon: IconButton(
                             onPressed: () {
-                              setState(() {
-                                obscurePassword = !obscurePassword;
-                              });
+                              context.read<LoginProvider>().actionObscurePassword();
                             },
-                            icon: Icon(obscurePassword == true
+                            icon: Icon(loginProvider.obscurePassword == true
                                 ? Icons.visibility_off
                                 : Icons.visibility)),
                         border: const OutlineInputBorder(
@@ -124,7 +116,7 @@ class _LoginPageState extends State<LoginPage> {
                   style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                 ),
                 TextFormField(
-                    controller: phoneController,
+                    controller: loginProvider.phoneController,
                     keyboardType: TextInputType.phone,
                     validator: (value) {
                       if (value!.isEmpty) {
@@ -144,14 +136,7 @@ class _LoginPageState extends State<LoginPage> {
                   style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.blue, elevation: 5),
                   onPressed: () {
-                    if (_formKey.currentState!.validate()) {
-                      context.read<LoginProvider>().processLogin(
-                          usernameController.text,
-                          passwordController.text,
-                          phoneController.text);
-                    } else {
-                      showAlertError();
-                    }
+                    context.read<LoginProvider>().processLogin(context);
                   },
                   child: Row(
                     children: [
@@ -186,23 +171,5 @@ class _LoginPageState extends State<LoginPage> {
       default:
         return const SizedBox();
     }
-  }
-
-  showAlertError() {
-    showDialog(
-      context: context,
-      builder: (context) {
-        return AlertDialog(
-          title: const Text('Periksa kelengkapan datamu!'),
-          actions: [
-            ElevatedButton(
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-                child: const Text('Ok'))
-          ],
-        );
-      },
-    );
   }
 }
