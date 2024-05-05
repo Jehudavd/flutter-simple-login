@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_app_course/controllers/comment_provider.dart';
+import 'package:flutter_app_course/form_comment_page.dart';
 import 'package:provider/provider.dart';
 
 class CommentPage extends StatefulWidget {
@@ -13,9 +14,9 @@ class _CommentPageState extends State<CommentPage> {
   @override
   void initState() {
     super.initState();
-    context.read<CommentProvider>().getProduct();
+    context.read<CommentProvider>().getComment();
   }
-  
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -24,6 +25,16 @@ class _CommentPageState extends State<CommentPage> {
             onPressed: () => Navigator.pop(context),
           ),
           title: Text('Daftar Product'),
+        ),
+        floatingActionButton: FloatingActionButton(
+          onPressed: () {
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => FormCommentPage(),
+                ));
+          },
+          child: Icon(Icons.add),
         ),
         body: Container(
           height: MediaQuery.sizeOf(context).height / 7,
@@ -68,6 +79,10 @@ class _CommentPageState extends State<CommentPage> {
       case CommentState.nodata:
         return Center(
           child: Text('No Data Comment'),
+        );
+      case CommentState.error:
+        return Center(
+          child: Text(context.watch<CommentProvider>().messageError),
         );
       default:
         return CircularProgressIndicator();
