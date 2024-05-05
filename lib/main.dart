@@ -27,10 +27,10 @@ class ApplicationFirst extends StatelessWidget {
           create: (context) => LoginProvider(),
         )
       ],
-      child: const MaterialApp(
+      child:  MaterialApp(
         debugShowCheckedModeBanner: false,
-        // home: ProductPage()
-        home: LoginPage(),
+        home: ProductPage(name: 'Gustav',)
+        // home: LoginPage(),
         // home: FormPage(),
         // home: MainPage(),
 
