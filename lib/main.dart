@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_app_course/comment_page.dart';
+import 'package:flutter_app_course/controllers/comment_provider.dart';
 import 'package:flutter_app_course/controllers/login_provider.dart';
 import 'package:flutter_app_course/controllers/main_provider.dart';
 import 'package:flutter_app_course/form_page.dart';
@@ -25,17 +27,18 @@ class ApplicationFirst extends StatelessWidget {
         ),
         ChangeNotifierProvider(
           create: (context) => LoginProvider(),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => CommentProvider(),
         )
       ],
-      child:  MaterialApp(
-        debugShowCheckedModeBanner: false,
-        home: ProductPage(name: 'Gustav',)
-        // home: LoginPage(),
-        // home: FormPage(),
-        // home: MainPage(),
+      child: MaterialApp(debugShowCheckedModeBanner: false, home: CommentPage()
+          // home: LoginPage(),
+          // home: FormPage(),
+          // home: MainPage(),
 
-        // home: MainProviderPage(),
-      ),
+          // home: MainProviderPage(),
+          ),
     );
   }
 }
