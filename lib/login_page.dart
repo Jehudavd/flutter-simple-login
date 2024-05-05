@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_app_course/controllers/login_provider.dart';
 import 'package:flutter_app_course/product_page.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:provider/provider.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -143,13 +145,10 @@ class _LoginPageState extends State<LoginPage> {
                       backgroundColor: Colors.blue, elevation: 5),
                   onPressed: () {
                     if (_formKey.currentState!.validate()) {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => ProductPage(
-                              name: usernameController.text,
-                            ),
-                          ));
+                      context.read<LoginProvider>().processLogin(
+                          usernameController.text,
+                          passwordController.text,
+                          phoneController.text);
                     } else {
                       showAlertError();
                     }
@@ -164,8 +163,7 @@ class _LoginPageState extends State<LoginPage> {
                     ],
                   ),
                 ),
-                Text(
-                    'Hello, ${username ?? 'N/A'} dengan password sebagai berikut ${password ?? 'xxx'}')
+                bodyMessage()
               ],
             ),
           ),
@@ -174,18 +172,34 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
+  Widget bodyMessage() {
+    var state = context.watch<LoginProvider>().loginState;
+    var username = context.watch<LoginProvider>().username;
+    var phone = context.watch<LoginProvider>().phone;
+    switch (state) {
+      case StateLogin.initial:
+        return const SizedBox();
+      case StateLogin.success:
+        return Text('Hello, $username dengan No.Hp sebagai berikut $phone');
+      case StateLogin.error:
+        return Text(context.watch<LoginProvider>().messageError);
+      default:
+        return const SizedBox();
+    }
+  }
+
   showAlertError() {
     showDialog(
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: Text('Periksa kelengkapan datamu!'),
+          title: const Text('Periksa kelengkapan datamu!'),
           actions: [
             ElevatedButton(
                 onPressed: () {
                   Navigator.pop(context);
                 },
-                child: Text('Ok'))
+                child: const Text('Ok'))
           ],
         );
       },

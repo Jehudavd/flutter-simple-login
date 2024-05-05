@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_app_course/controllers/login_provider.dart';
 import 'package:flutter_app_course/controllers/main_provider.dart';
 import 'package:flutter_app_course/form_page.dart';
 import 'package:flutter_app_course/login_page.dart';
@@ -21,16 +22,19 @@ class ApplicationFirst extends StatelessWidget {
       providers: [
         ChangeNotifierProvider(
           create: (context) => MainProvider(),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => LoginProvider(),
         )
       ],
       child: const MaterialApp(
         debugShowCheckedModeBanner: false,
         // home: ProductPage()
-        // home: LoginPage(),
+        home: LoginPage(),
         // home: FormPage(),
         // home: MainPage(),
 
-        home: MainProviderPage(),
+        // home: MainProviderPage(),
       ),
     );
   }
